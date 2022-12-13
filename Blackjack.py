@@ -85,6 +85,7 @@ def hit_or_stand(deck, hand):
             hit(deck, hand)
         elif x[0].lower() == 's':
             print('Player stands. Dealer is playing.')
+            isGameActive = False
         else: 
             print('Sorry, please try again.')
             continue

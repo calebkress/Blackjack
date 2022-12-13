@@ -28,6 +28,34 @@ def ace_values(num_aces):
     return get_ace_values(temp_list)
 
 # make deck
-def make_decks()      
+def make_decks(num_decks, card_types):
+    new_deck = []
+    for i in range(num_decks):
+        for j in range(4):
+            new_deck.extend(card_types)
+    random.shuffle(new_deck)
+    return new_deck 
+
+# sum value of hand
+def sum_up(hand):
+    aces = 0
+    total = 0
+
+    for card in hand:
+        if card != 'A':
+            total += card
+        else:
+            aces += 1
+
+    ace_value_list = ace_values(aces)
+    final_totals = [i + total for i in ace_value_list if i + total <= 21]
+
+    if final_totals == []:
+        return min(ace_value_list) + total
+    else:
+        return max(final_totals)
+
+
+
     
 

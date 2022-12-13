@@ -37,7 +37,7 @@ def make_decks(num_decks, card_types):
     return new_deck 
 
 # sum value of hand
-def sum_up(hand):
+def total_up(hand):
     aces = 0
     total = 0
 
@@ -54,6 +54,38 @@ def sum_up(hand):
         return min(ace_value_list) + total
     else:
         return max(final_totals)
+
+# handle game being played
+def play_game(dealer_hand, player_hand, blackjack, curr_player_results, dealer_cards, hit_stay, card_count, dealer_bust):
+    action = 0
+    # Dealer check for 21
+    if set(dealer_hand) == blackjack:
+        for player in range(players):
+            if (set(player_hand[player])) != blackjack:
+                curr_player_results[0, player] = -1
+            else:
+                curr_player_results[0, player] = 0
+    else:
+        for player in range(players):
+            # Player check for 21
+            if (set(player_hand[player])) == blackjack:
+                curr_player_results[0, player] = 1
+            else:
+                if (hit_stay >= 0.5) and (total_up(player_hand[player]) != 21):
+                    player_hand[player].append(dealer_cards.pop(0))
+                    card_count[player_hand[player][-1]] += 1
+                    action = 1
+                    live_total.append(total_up(player_hand[player]))
+                    if total_up(player_hand[player]) > 21:
+                        curr_player_results[0, player] = -1
+            
+    # dealer hits based on rules
+    card_count[dealer_hand[-1]] += 1
+    while total_up(dealer_hand) < 17:
+        dealer_hand.append(dealer_cards.pop(0))
+        card_count[dealer_hand[-1]] += 1
+        
+
 
 
 

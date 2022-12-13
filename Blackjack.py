@@ -90,4 +90,19 @@ def hit_or_stand(deck, hand):
             continue
         break
 
+# define function to hide dealer's second card
+def show_some(player, dealer):
+    print('\nDealer\'s hand: ')
+    print(' <card hidden>')
+    print('', dealer.cards[1])
+    print('\nPlayer\'s hand: ', *player.cards, sep='\n ')
+
+# define function to show both players' cards
+def show_all(player, dealer):
+    print('\nDealer\'s hand: ', *dealer.cards, sep='\n ')
+    print('Dealer\'s Hand = ', dealer.value)
+    print('\nPlayer\'s hand: ', *player.cards, sep='\n ')
+    print('Player\'s Hand = ', player.value)
+
+
 

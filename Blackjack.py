@@ -1,43 +1,61 @@
-from collections import namedtuple
-from itertools import product
-from random import shuffle
-from typing import List
+import random
 
-Card = namedtuple('Card', ('rank', 'suit'))
+suits = ('Hearts', 'Spades', 'Diamonds', 'Clubs')
+ranks = ('Two', 'Three', 'Four', 'Five', 'Six', 'Seven', 'Eight', 'Nine', 'Ten', 'Jack', 'Queen', 'King', 'Ace')
+values = { 'Two': 2, 'Three': 3, 'Four': 4, 'Five': 5, 'Six': 6, 'Seven': 7, 'Eight': 8, 'Nine': 9, 'Ten': 10, 'Jack': 10, 'Queen': 10, 'King': 10, 'Ace': 11}
 
+isGameActive = True
 
+# define Card class
+class Card: 
+    def __init__(self, suit, rank):
+        self.suit = suit
+        self.rank = rank
+    def __str__(self): 
+        return self.rank + ' of ' + self.suit
+
+# define Deck class
 class Deck:
-    card_ranks = []
-    card_suits = []
+    def __init__(self): 
+        self.deck = []
+        for suit in suits:
+            for rank in ranks:
+                self.deck.append(Card(suit, rank))
+    def __str__(self):
+        deck_comp = ''
+        for card in self.deck:
+            deck_comp += '\n ' + card.__str__()
+        return 'The deck has: ' + deck_comp
+    def shuffle(self): 
+        random.shuffle(self.deck)
+    def deal(self): 
+        dealt_card = self.deck.pop()
+        return dealt_card
 
-    def __init__(self) -> None:
+# define Hand class
+class Hand: 
+    def __init__(self):
         self.cards = []
-        self.refresh_deck()
+        self.value = 0
+        self.aces = 0
+    def add_card(self, card): 
+        self.cards.append(card)
+        self.value += values[card.rank]
+        if card.rank == 'Ace':
+            self.aces += 1
+    def adjust_for_ace(self):
+        while self.value > 21 and self.aces:
+            self.value -= 10
+            self.aces -= 1
 
-    def refresh_deck(self) -> int:
-        self.cards = map(Card, product(self.card_ranks, self.card_suits))
+# define Chips class
+class Chips:
+    def __init__(self):
+        self.total = 100
+        self.bet = 0
+    def win_bet(self):
+        self.total += self.bet
+    def lose_bet(self):
+        self.total -= self.bet
+    
 
-    def shuffle(self) -> None:
-        shuffle(self.cards)
-
-    def draw_card(self) -> Card:
-        return self.cards.pop()
-
-
-class FrenchDeck(Deck):
-    card_ranks = ['Ace', '2', '3', '4', '5', '6', '7', '8', '9', '10', 'J', 'Q', 'K']
-    card_suits = ['Hearts', 'Spades', 'Clubs', 'Diamonds']
-
-
-class Game:
-    def __init__(self, deck: Deck) -> None:
-        raise NotImplementedError
-
-    def card_value(self, card: Card) -> int:
-        raise NotImplementedError
-
-    def hand_value(self, hand: List[Card]) -> int:
-        raise NotImplementedError
-
-    def play(self) -> None:
-        raise NotImplementedError

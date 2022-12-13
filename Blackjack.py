@@ -75,6 +75,10 @@ def take_bet(chips):
 def hit(deck, hand):
     hand.add_card(deck.deal())
     hand.adjust_for_ace()
+    if player_hand.value > 21:
+        show_all(player_hand, dealer_hand)
+        print("Player busts.")
+        isGameActive = False
 
 # function to ask player to hit or stand
 def hit_or_stand(deck, hand):
@@ -85,6 +89,7 @@ def hit_or_stand(deck, hand):
             hit(deck, hand)
         elif x[0].lower() == 's':
             print('Player stands. Dealer is playing.')
+            show_all(player_hand, dealer_hand)
             isGameActive = False
         else: 
             print('Sorry, please try again.')

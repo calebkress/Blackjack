@@ -58,4 +58,36 @@ class Chips:
     def lose_bet(self):
         self.total -= self.bet
     
+# function to take player's bet
+def take_bet(chips):
+    while True:
+        try:
+            chips.bet = int(input('How many chips would you like to bet? '))
+        except ValueError: 
+            print('Sorry, a bet must be an integer value.')
+        else:
+            if chips.bet > chips.total:
+                print('Sorry, your bet can\'t exceed ', chips.total)
+            else:
+                break
+
+# function to handle player hit
+def hit(deck, hand):
+    hand.add_card(deck.deal())
+    hand.adjust_for_ace()
+
+# function to ask player to hit or stand
+def hit_or_stand(deck, hand):
+    global isGameActive
+    while True: 
+        x = input('Would you like to hit or stand? Enter \'h\' or \'s\': ')
+        if x[0].lower() == 'h':
+            hit(deck, hand)
+        elif x[0].lower() == 's':
+            print('Player stands. Dealer is playing.')
+        else: 
+            print('Sorry, please try again.')
+            continue
+        break
+
 
